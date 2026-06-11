@@ -148,10 +148,14 @@ Each mode controls note density, rhythmic placement, and ornamentation:
 | Balanced | 4–8 | Quarter + eighth notes | Light passing tones |
 | Dense | 8–12 | Eighth + sixteenth notes | Approach notes, neighbors |
 | Complex | 12–16 | Mixed, syncopated | Full chromatic vocabulary |
-| Chaotic | 16+ | Irregular, cross-rhythm | Anything harmonically valid |
+| Chaotic | 16–32 | Irregular, cross-rhythm | Anything harmonically valid |
 
 "Chaotic" is not random — it still respects chord tone placement on downbeats.
 It just maximizes rhythmic unpredictability and note density within harmonic rules.
+
+Chaotic upper bound is 32 — melody generator may use minNotesPerBar to push density without exceeding this.
+
+`shouldOrnament` is false only for Minimal; Balanced and above all return true (light passing tones in Balanced count as ornamentation).
 
 ### Voice leading (counter-melody)
 - Counter-melody moves in contrary motion to the main melody where possible
