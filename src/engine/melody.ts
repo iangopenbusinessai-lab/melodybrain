@@ -82,14 +82,10 @@ export function generateMelody(phrase: Phrase): Note[] {
             : chordTones
         pitch = weightedPick(pitched(pool, chord, beat, tension))
       } else {
-        // Upbeat: passing tones and approach notes, chord tones as last resort
-        const pool = passingTones.length > 0
-          ? [...passingTones, ...approachPitches]
-          : [...chordTones, ...approachPitches]
-        const deduped = [...new Set(pool)]
-        pitch = deduped.length > 0
-          ? weightedPick(pitched(deduped, chord, beat, tension))
-          : weightedPick(pitched(chordTones, chord, beat, tension))
+        // Upbeat: chord tones always in pool; scoreNote weights them ~2× over passing tones.
+        // Excluding them was the bug — every non-downbeat ended up a non-chord tone.
+        const pool = [...new Set([...chordTones, ...passingTones, ...approachPitches])]
+        pitch = weightedPick(pitched(pool, chord, beat, tension))
       }
 
       // Duration: weight pool toward targetDur; high tension biases shorter
