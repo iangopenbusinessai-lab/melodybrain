@@ -161,6 +161,7 @@ Chaotic upper bound is 32 — melody generator may use minNotesPerBar to push de
 - Counter-melody moves in contrary motion to the main melody where possible
 - Avoid parallel 5ths and parallel octaves between melody and counter-melody
 - Prefer 3rds and 6ths as harmonic intervals between the two voices
+- On low melody notes near C4, counter-melody may cross above the melody — this is intentional (voice crossing) and musically valid.
 
 ### Bass line rules
 - Bass always plays the chord root on beat 1

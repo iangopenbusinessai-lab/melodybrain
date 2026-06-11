@@ -2,6 +2,7 @@ import type { Pitch, Note, Phrase, Chord } from './types'
 import { getChordTones, getPassingTones, getApproachNotes, scoreNote } from './chords'
 import { interpolateTension } from './phraseArc'
 import { getRhythmPool, getNoteDensity } from './complexity'
+import { weightedPick } from './utils'
 
 const MELODY_LO = 60  // C4
 const MELODY_HI = 84  // C6
@@ -11,17 +12,6 @@ function toMelodyRange(pitch: Pitch): Pitch {
   while (p < MELODY_LO) p += 12
   while (p > MELODY_HI) p -= 12
   return p
-}
-
-function weightedPick<T>(candidates: { value: T; weight: number }[]): T {
-  const total = candidates.reduce((s, c) => s + c.weight, 0)
-  if (total === 0) return candidates[Math.floor(Math.random() * candidates.length)].value
-  let r = Math.random() * total
-  for (const c of candidates) {
-    r -= c.weight
-    if (r <= 0) return c.value
-  }
-  return candidates[candidates.length - 1].value
 }
 
 function pitched(
