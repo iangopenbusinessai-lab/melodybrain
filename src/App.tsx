@@ -4,7 +4,9 @@ import { buildDefaultContour } from './engine/phraseArc'
 import { generateMelody } from './engine/melody'
 import { exportMelody, downloadMidi } from './engine/midiExport'
 import { previewMelody, previewChords, stopPreview } from './engine/playback'
-import type { Phrase, Note } from './engine/types'
+import type { Phrase, Note, Chord } from './engine/types'
+
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
 
 const PHRASE: Phrase = {
   chords: [
@@ -53,6 +55,21 @@ export default function App() {
     stopPreview()
   }
 
+  function handleDebugChords() {
+    const testChords: Chord[] = [
+      { root: 60, quality: 'maj7', durationBeats: 4, intervals: buildChordIntervals('maj7') },
+      { root: 57, quality: 'min7', durationBeats: 4, intervals: buildChordIntervals('min7') },
+      { root: 62, quality: 'min7', durationBeats: 4, intervals: buildChordIntervals('min7') },
+      { root: 55, quality: 'dom7', durationBeats: 4, intervals: buildChordIntervals('dom7') },
+    ]
+    for (const chord of testChords) {
+      const intervals = buildChordIntervals(chord.quality)
+      const tones     = getChordTones(chord)
+      const names     = tones.map(t => NOTE_NAMES[((t % 12) + 12) % 12]).join(' ')
+      console.log(`${NOTE_NAMES[chord.root % 12]}${chord.quality} → [${tones.join(', ')}] → ${names}`)
+    }
+  }
+
   function handleDownload() {
     if (notes.length === 0) return
     downloadMidi(exportMelody(notes, PHRASE), 'melody.mid')
@@ -70,6 +87,7 @@ export default function App() {
         <button onClick={handlePlay}  disabled={notes.length === 0}>Play</button>
         <button onClick={handleStop}>Stop</button>
         <button onClick={handleDownload} disabled={notes.length === 0}>Download MIDI</button>
+        <button onClick={handleDebugChords}>Debug Chords</button>
       </div>
 
       <div style={{ display: 'flex', gap: 32, marginBottom: 24 }}>
